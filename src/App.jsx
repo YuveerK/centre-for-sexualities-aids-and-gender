@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import GenericPage from './pages/GenericPage.jsx'
 import About from './pages/About.jsx'
@@ -8,6 +8,12 @@ import Team from './pages/Team.jsx'
 import Sage from './pages/Sage.jsx'
 import News from './pages/News.jsx'
 import Publications from './pages/Publications.jsx'
+import JustLeadership from './pages/JustLeadership.jsx'
+import CoreHgs from './pages/CoreHgs.jsx'
+import GbvSocialJustice from './pages/GbvSocialJustice.jsx'
+import Changemakers from './pages/Changemakers.jsx'
+import Cse from './pages/Cse.jsx'
+import WorkingWithYoungPeople from './pages/WorkingWithYoungPeople.jsx'
 import { routePages } from './pages/pageData.js'
 
 const navTree = [
@@ -132,13 +138,23 @@ function SiteLayout() {
               <div className="grid gap-5 text-sm">
                 {navTree.map((item) => (
                   <div key={item.label} className="space-y-3">
-                    <NavLink to={item.to} end={item.to === '/'} className="font-semibold text-ink-900">
+                    <NavLink
+                      to={item.to}
+                      end={item.to === '/'}
+                      className="font-semibold text-ink-900"
+                      onClick={() => setMenuOpen(false)}
+                    >
                       {item.label}
                     </NavLink>
                     {item.children && (
                       <div className="grid gap-2 pl-4 text-ink-700">
                         {item.children.map((child) => (
-                          <NavLink key={child.label} to={child.to} className="hover:text-ink-950">
+                          <NavLink
+                            key={child.label}
+                            to={child.to}
+                            className="hover:text-ink-950"
+                            onClick={() => setMenuOpen(false)}
+                          >
                             {child.label}
                           </NavLink>
                         ))}
@@ -159,13 +175,42 @@ function SiteLayout() {
         <Route path="/sage-up" element={<Sage />} />
         <Route path="/news" element={<News />} />
         <Route path="/publications" element={<Publications />} />
-        {routePages.map((page) => (
-          <Route
-            key={page.path}
-            path={page.path}
-            element={<GenericPage title={page.title} description={page.description} sections={page.sections} />}
-          />
-        ))}
+        <Route path="/projects/just-leadership" element={<JustLeadership />} />
+        <Route path="/projects/africa-europe-core-hgs" element={<CoreHgs />} />
+        <Route path="/projects/gbv-social-justice" element={<GbvSocialJustice />} />
+        <Route path="/projects/gender-equality-changemakers" element={<Changemakers />} />
+        <Route path="/projects/cse" element={<Cse />} />
+        <Route path="/working-with-young-people" element={<WorkingWithYoungPeople />} />
+        {routePages.map((page) => {
+          if (page.path === '/our-story') {
+            return <Route key={page.path} path={page.path} element={<Navigate to="/about" replace />} />
+          }
+          if (page.path === '/projects/just-leadership') {
+            return null
+          }
+          if (page.path === '/projects/africa-europe-core-hgs') {
+            return null
+          }
+          if (page.path === '/projects/gbv-social-justice') {
+            return null
+          }
+          if (page.path === '/projects/gender-equality-changemakers') {
+            return null
+          }
+          if (page.path === '/projects/cse') {
+            return null
+          }
+          if (page.path === '/working-with-young-people') {
+            return null
+          }
+          return (
+            <Route
+              key={page.path}
+              path={page.path}
+              element={<GenericPage title={page.title} description={page.description} sections={page.sections} />}
+            />
+          )
+        })}
         <Route path="*" element={<GenericPage title="Page not found" description="Sorry, this page does not exist." />} />
       </Routes>
     </div>
